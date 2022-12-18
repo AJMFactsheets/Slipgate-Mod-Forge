@@ -26,8 +26,8 @@ public class SlipgateParticle extends PortalParticle {
 			this.sprites = spriteSet;
 		}
 	
-		public Particle createParticle(SimpleParticleType p_107581_, ClientLevel p_107582_, double p_107583_, double p_107584_, double p_107585_, double p_107586_, double p_107587_, double p_107588_) {
-			PortalParticle portalparticle = new SlipgateParticle(p_107582_, p_107583_, p_107584_, p_107585_, this.sprites, p_107586_, p_107587_, p_107588_);
+		public Particle createParticle(SimpleParticleType particleType, ClientLevel level, double xCoord, double yCoord, double zCoord, double xd, double yd, double zd) {
+			PortalParticle portalparticle = new SlipgateParticle(level, xCoord, yCoord, zCoord, this.sprites, xd, yd, zd);
 			portalparticle.pickSprite(sprites);
 			return portalparticle;
 		}

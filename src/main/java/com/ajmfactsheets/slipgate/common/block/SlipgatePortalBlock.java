@@ -17,20 +17,20 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class SlipgatePortalBlock extends NetherPortalBlock {
 
-	public SlipgatePortalBlock(Properties p_54909_) {
-		super(p_54909_);
+	public SlipgatePortalBlock(Properties properties) {
+		super(properties);
 	}
 
 	@Override
-	public void randomTick(BlockState p_221799_, ServerLevel p_221800_, BlockPos p_221801_, RandomSource p_221802_) {
-		if (p_221800_.dimensionType().natural() && p_221800_.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)
-				&& p_221802_.nextInt(2000) < p_221800_.getDifficulty().getId()) {
-			while (p_221800_.getBlockState(p_221801_).is(this)) {
-				p_221801_ = p_221801_.below();
+	public void randomTick(BlockState blockstate, ServerLevel level, BlockPos blockpos, RandomSource random) {
+		if (level.dimensionType().natural() && level.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)
+				&& random.nextInt(2000) < level.getDifficulty().getId()) {
+			while (level.getBlockState(blockpos).is(this)) {
+				blockpos = blockpos.below();
 			}
 
-			if (p_221800_.getBlockState(p_221801_).isValidSpawn(p_221800_, p_221801_, EntityType.PIGLIN)) {
-				Entity entity = EntityType.PIGLIN.spawn(p_221800_, p_221801_.above(), MobSpawnType.STRUCTURE);
+			if (level.getBlockState(blockpos).isValidSpawn(level, blockpos, EntityType.PIGLIN)) {
+				Entity entity = EntityType.PIGLIN.spawn(level, blockpos.above(), MobSpawnType.STRUCTURE);
 				if (entity != null) {
 					entity.setPortalCooldown();
 				}
@@ -40,37 +40,37 @@ public class SlipgatePortalBlock extends NetherPortalBlock {
 	}
 
 	@Override
-	public void entityInside(BlockState p_54915_, Level p_54916_, BlockPos p_54917_, Entity p_54918_) {
-		if (p_54916_.dimension().equals(Level.NETHER) && !p_54918_.isPassenger() && !p_54918_.isVehicle()
-				&& p_54918_.canChangeDimensions()) {
-			p_54918_.handleInsidePortal(p_54917_);
+	public void entityInside(BlockState blockstate, Level level, BlockPos blockpos, Entity entity) {
+		if (level.dimension().equals(Level.NETHER) && !entity.isPassenger() && !entity.isVehicle()
+				&& entity.canChangeDimensions()) {
+			entity.handleInsidePortal(blockpos);
 		}
 
 	}
 	
 	@Override
-	public void animateTick(BlockState p_221794_, Level p_221795_, BlockPos p_221796_, RandomSource p_221797_) {
-	      if (p_221797_.nextInt(100) == 0) {
-	         p_221795_.playLocalSound((double)p_221796_.getX() + 0.5D, (double)p_221796_.getY() + 0.5D, (double)p_221796_.getZ() + 0.5D, SoundEvents.PORTAL_AMBIENT, SoundSource.BLOCKS, 0.5F, p_221797_.nextFloat() * 0.4F + 0.8F, false);
+	public void animateTick(BlockState blockstate, Level level, BlockPos blockpos, RandomSource random) {
+	      if (random.nextInt(100) == 0) {
+	         level.playLocalSound((double)blockpos.getX() + 0.5D, (double)blockpos.getY() + 0.5D, (double)blockpos.getZ() + 0.5D, SoundEvents.PORTAL_AMBIENT, SoundSource.BLOCKS, 0.5F, random.nextFloat() * 0.4F + 0.8F, false);
 	      }
 
 	      for(int i = 0; i < 4; ++i) {
-	         double d0 = (double)p_221796_.getX() + p_221797_.nextDouble();
-	         double d1 = (double)p_221796_.getY() + p_221797_.nextDouble();
-	         double d2 = (double)p_221796_.getZ() + p_221797_.nextDouble();
-	         double d3 = ((double)p_221797_.nextFloat() - 0.5D) * 0.5D;
-	         double d4 = ((double)p_221797_.nextFloat() - 0.5D) * 0.5D;
-	         double d5 = ((double)p_221797_.nextFloat() - 0.5D) * 0.5D;
-	         int j = p_221797_.nextInt(2) * 2 - 1;
-	         if (!p_221795_.getBlockState(p_221796_.west()).is(this) && !p_221795_.getBlockState(p_221796_.east()).is(this)) {
-	            d0 = (double)p_221796_.getX() + 0.5D + 0.25D * (double)j;
-	            d3 = (double)(p_221797_.nextFloat() * 2.0F * (float)j);
+	         double d0 = blockpos.getX() + random.nextDouble();
+	         double d1 = blockpos.getY() + random.nextDouble();
+	         double d2 = blockpos.getZ() + random.nextDouble();
+	         double d3 = (random.nextFloat() - 0.5D) * 0.5D;
+	         double d4 = (random.nextFloat() - 0.5D) * 0.5D;
+	         double d5 = (random.nextFloat() - 0.5D) * 0.5D;
+	         int j = random.nextInt(2) * 2 - 1;
+	         if (!level.getBlockState(blockpos.west()).is(this) && !level.getBlockState(blockpos.east()).is(this)) {
+	            d0 = blockpos.getX() + 0.5D + 0.25D * j;
+	            d3 = (random.nextFloat() * 2.0F * j);
 	         } else {
-	            d2 = (double)p_221796_.getZ() + 0.5D + 0.25D * (double)j;
-	            d5 = (double)(p_221797_.nextFloat() * 2.0F * (float)j);
+	            d2 = blockpos.getZ() + 0.5D + 0.25D * j;
+	            d5 = (random.nextFloat() * 2.0F * j);
 	         }
 	         
-	         p_221795_.addParticle(SlipgateMod.SLIPGATE_PORTAL_PARTICLE.get(), d0, d1, d2, d3, d4, d5);
+	         level.addParticle(SlipgateMod.SLIPGATE_PORTAL_PARTICLE.get(), d0, d1, d2, d3, d4, d5);
 	      }
 
 	   }
