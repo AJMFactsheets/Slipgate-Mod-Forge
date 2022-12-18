@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "slipgate:block/slipgate_portal_ns"
+    },
+    "axis=z": {
+      "model": "slipgate:block/slipgate_portal_ew"
+    }
+  }
+}
