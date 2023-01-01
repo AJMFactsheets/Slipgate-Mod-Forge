@@ -1,4 +1,5 @@
 {
+	"render_type": "translucent",
     "textures": {
         "particle": "slipgate:block/slipgate_portal",
         "portal": "slipgate:block/slipgate_portal"

@@ -4,10 +4,15 @@ import org.slf4j.Logger;
 
 import com.ajmfactsheets.slipgate.client.particles.SlipgateParticle;
 import com.ajmfactsheets.slipgate.common.block.SlipgatePortalBlock;
+import com.ajmfactsheets.slipgate.common.item.FlintAndGoldItem;
+import com.ajmfactsheets.slipgate.world.dimension.SlipDimension;
+import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -33,18 +38,16 @@ public class SlipgateMod {
     public static final String MODID = "slipgate";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
-    // Create a Deferred Register to hold Blocks which will all be registered under the "slipgate" namespace
+    
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
-    // Create a Deferred Register to hold Items which will all be registered under the "slipgate" namespace
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
-    // Create a Deferred Register to hold Particles which will all be registered under the "slipgate" namespace
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, MODID);
+    public static final DeferredRegister<PoiType> POI = DeferredRegister.create(ForgeRegistries.POI_TYPES, SlipgateMod.MODID);
 
-    // Creates a new Block with the id "examplemod:example_block", combining the namespace and path
     public static final RegistryObject<Block> SLIPGATE_PORTAL_BLOCK = BLOCKS.register("slipgate_portal", () -> new SlipgatePortalBlock(BlockBehaviour.Properties.of(Material.PORTAL).noCollission().randomTicks().strength(-1.0F).sound(SoundType.GLASS).lightLevel((level) -> {return 11;})));
-    // Creates a new BlockItem with the id "examplemod:example_block", combining the namespace and path
-//    public static final RegistryObject<Item> EXAMPLE_BLOCK_ITEM = ITEMS.register("slipgate_portal", () -> new BlockItem(SLIPGATE_PORTAL_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<Item> FLINT_AND_GOLD = ITEMS.register("flint_and_gold", () -> new FlintAndGoldItem(new Item.Properties().durability(8)));
     public static final RegistryObject<SimpleParticleType> SLIPGATE_PORTAL_PARTICLE = PARTICLE_TYPES.register("slipgate_particle", () -> new SimpleParticleType(true));
+    public static final RegistryObject<PoiType> SLIPGATE_POI = POI.register("slipgate", () -> new PoiType(ImmutableSet.copyOf(SLIPGATE_PORTAL_BLOCK.get().getStateDefinition().getPossibleStates()), 0, 1));
     
     public SlipgateMod()
     {
@@ -59,6 +62,9 @@ public class SlipgateMod {
         ITEMS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so items get registered
         PARTICLE_TYPES.register(modEventBus);
+        POI.register(modEventBus);
+        
+        SlipDimension.register();
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -76,8 +82,8 @@ public class SlipgateMod {
 
     private void addCreative(CreativeModeTabEvent.BuildContents event)
     {
-//        if (event.getTab() == CreativeModeTabs.BUILDING_BLOCKS)
-//            event.accept(EXAMPLE_BLOCK_ITEM);
+        if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES)
+            event.accept(FLINT_AND_GOLD);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

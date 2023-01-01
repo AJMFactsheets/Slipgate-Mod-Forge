@@ -1,3 +1,4 @@
 {
-  block.slipgate.slipgate_portal Slipgate Portal
+  "block.slipgate.slipgate_portal": "Slipgate Portal",
+  "item.slipgate.flint_and_gold": "Flint and Gold"
 }
